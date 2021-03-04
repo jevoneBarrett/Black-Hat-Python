@@ -111,7 +111,7 @@ if __name__ == '__main__':
     parser.add_argument('-c', '--command', action='store_true', help='Command shell')
     parser.add_argument('-e', '--execute', help='Execute specified command')
     parser.add_argument('-l', '--listen', action='store_true', help='Listen')
-    parser.add_argument('-p', '--port', type=int, default=5555, help='Specified port')
+    parser.add_argument('-p', '--port', type=int, default=9991, help='Specified port')
     parser.add_argument('-t', '--target', default='192.168.1.65', help='Specified IP')
     parser.add_argument('-u', '--upload', help='Upload file')
     args = parser.parse_args()
