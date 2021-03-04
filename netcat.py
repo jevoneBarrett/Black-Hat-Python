@@ -6,6 +6,8 @@ import sys
 import textwrap
 import threading
 
+# python -m nuitka --onefile --windows-onefile-tempdir netcat.py
+
 class NetCat:
 
     def __init__(self, args, buffer=None):
@@ -66,7 +68,7 @@ class NetCat:
                     break
             with open(self.args.upload, 'wb') as f:
                 f.write(file_buffer)
-            message = f'Saved file {self.args.upload}'
+            message = ('Saved file %s' % self.args.upload)
             client_socket.send(message.encode())
         elif self.args.command:
             cmd_buffer = b''
@@ -80,7 +82,7 @@ class NetCat:
                         client_socket.send(response.encode())
                     cmd_buffer = b''
                 except Exception as e:
-                    print(f'Server killed: {e}')
+                    print( ('Server killed: %s' % e))
                     self.socket.close()
                     sys.exit()
 
@@ -110,7 +112,7 @@ if __name__ == '__main__':
     parser.add_argument('-e', '--execute', help='Execute specified command')
     parser.add_argument('-l', '--listen', action='store_true', help='Listen')
     parser.add_argument('-p', '--port', type=int, default=5555, help='Specified port')
-    parser.add_argument('-t', '--target', default='192.168.1.203', help='Specified IP')
+    parser.add_argument('-t', '--target', default='192.168.1.65', help='Specified IP')
     parser.add_argument('-u', '--upload', help='Upload file')
     args = parser.parse_args()
     if args.listen:
