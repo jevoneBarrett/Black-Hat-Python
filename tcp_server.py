@@ -1,25 +1,36 @@
 import socket
 import threading
 
-IP = '0.0.0.0'
-PORT = 9998
+bind_ip = socket.gethostname()
+bind_port = 9991
 
+server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+
+server.bind((bind_ip, bind_port))
+
+server.listen(5)
+
+print("[*] Listening on %s:%d" % (bind_ip, bind_port))
+
+
+# this is our client handling thread
 def handle_client(client_socket):
-    with client_socket as sock:
-        request = sock.recv(1024)
-        print(f"[*] Received: {request.decode("utf-8")}")
-        sock.send(b"ACK")
+    # just print out what the client sends
+    request = client_socket.recv(1024)
 
-def main():
-    server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    server.bind((IP, PORT))
-    print(f"[*] Listening on {IP}:{PORT}")
+    print("[*] Received: %s" % request)
 
-    while True:
-        client, address = server.accept()
-        print(f"[*] Accepted connection from {address[0]}:{address[1]}")
-        client_handler = threading.Thread(target=handle_client, args=(client,))
-        client_handler.start()
+    # send back a packet
+    client_socket.send(b"ACK!")
+    print(client_socket.getpeername())
+    client_socket.close()
 
-if __name__=="__main__":
-    main()
+
+while True:
+    client, addr = server.accept()
+
+    print("[*] Accepted connection from: %s:%d" % (addr[0], addr[1]))
+
+    # spin up our client thread to handle incoming data
+    client_handler = threading.Thread(target=handle_client, args=(client,))
+    client_handler.start()

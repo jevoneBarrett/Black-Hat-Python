@@ -3,6 +3,7 @@ import socket
 target_host = input("Please enter a host to connect to: ")
 short_host = target_host[4:]
 target_port = int(input("Please enter a port to connect to: "))
+target_port = 9991
 d = f"GET / HTTP/1.1\r\nHost: {short_host}\r\n\r\n"
 data = d.encode("utf-8")
 
