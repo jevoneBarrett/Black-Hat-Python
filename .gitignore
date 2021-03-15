@@ -2,3 +2,4 @@ test_trojan/
 process_monitor_log.csv
 key.*
 *.exe
+*.txt

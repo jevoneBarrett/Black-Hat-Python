@@ -1,7 +1,6 @@
 import ipaddress
 import os
 import socket
-import socket
 import struct
 import sys
 

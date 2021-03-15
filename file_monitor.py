@@ -1,5 +1,4 @@
 import os
-import html
 import tempfile
 import threading
 import win32con

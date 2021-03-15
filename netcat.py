@@ -6,7 +6,7 @@ import sys
 import textwrap
 import threading
 
-# python -m nuitka --onefile --windows-onefile-tempdir netcat.py
+# python -m nuitka --onefile --windows-disable-console --windows-onefile-tempdir netcat.py
 
 class NetCat:
 
