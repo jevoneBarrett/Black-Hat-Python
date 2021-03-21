@@ -1,7 +1,7 @@
 import time
 import win32com.client as win32
 import win32api
-
+import sys
 
 def explore():
     ie = win32.gencache.EnsureDispatch('InternetExplorer.Application')
@@ -19,5 +19,12 @@ def shutDown():
         print(f"Attempt to shut down PC failed because: {e}")
 
 
-data = win32api.GetLogicalDriveStrings()
+def get_default_interface():
+    if sys.platform == "win32":
+        return "Wi-Fi"
+    else:
+        return "en0"
+
+
+data = get_default_interface()
 print(data)
