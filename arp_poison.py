@@ -19,11 +19,10 @@ def get_mac(target_ip):
     return None
 
 def get_default_interface():
-    if sys.platform == "win32":
+    if os.name == "nt":
         return "Wi-Fi"
     else:
         return "en0"
-
 
 TIME_LIMIT = time.time() + 120
 DEFAULT_INTERFACE = get_default_interface()
